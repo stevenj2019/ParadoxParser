@@ -2,8 +2,12 @@
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.packages.find]
-where = ["ParadoxParser"]
+[tool.setuptools]
+packages = ["ParadoxParser"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"ParadoxParser" = ["templates/**/*"]
 
 [project]
 name = "ParadoxParser"
