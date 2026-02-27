@@ -5,7 +5,7 @@ from .ParadoxNodes import (GenericNode, GenericKeyValue, GenericBlock,
                           GenericFloat, GenericInt, GenericString,
                           GenericBool, GenericToken, 
                           GenericComparator)
-from constants import (LOGIC_FLOW_KEYS, LOGIC_KEYS, TRIGGER_KEYS)
+from .constants import (LOGIC_FLOW_KEYS, LOGIC_KEYS, TRIGGER_KEYS)
 
 #Parse a single Paradox script file (*.txt/*.gfx/*.gui(though idk why you would))
 class ParadoxScriptParser:
