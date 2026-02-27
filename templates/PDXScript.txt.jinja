@@ -1,0 +1,5 @@
+{#NOTE - This launches the iter (hopefully)}
+{% set ns = namespace(indent=0)%}
+{% for object in file.nodes recursive %}
+    {% include "inner_line_compiler.txt.jinja"%} {#<- Secret Sauce#}
+{% endfor %}
