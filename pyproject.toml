@@ -3,9 +3,9 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ParadoxParder"
+name = "ParadoxParser"
 version = "0.0.1"
-dependencies = []
+dependencies = ["Jinja2==3.1.6", "MarkupSafe==3.0.3"]
 requires-python = ">=3.11"
 authors = [
   {name = "Stevenj2019", email = "steven.j2019@protonmail.com"},
