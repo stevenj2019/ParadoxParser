@@ -14,13 +14,25 @@ limit =
       var = x 
     }
 }
+will be treat identically, (because they are)
+## Installation 
+``` pip install git+https://github.com/stevenj2019/ParadoxParser.git```
+## Known Limitation (will address)
+* preserve comments, as a custom object, so it can be easily removed in script
 
-(note, the writer doesnt care for your preference, its "correct" wether you like it or not) 
-(like the second example)
+## Known Limitation (will never address)
+* the Writer Part of this module will follow formatting best practices (as commonly agreed by community and wiki), if you care, sorry, i format weirdly too, ill let this fix it for me :D
 
-NOTE: currently, this will nuke your comments, i am working on it, but (see AI usage) i dont want to do anymore of that than i have to, and it isnt a priority, if it has comments in it, its likely a complex script file, and i see no value in why youd want to make changes this way.  
 
-#AI usage notice
-The parser itself, is entirely "vibe coded", it was a boring process of ensuring every possible case, in paradox changes, or just ibndividual formatting difference, were all included, and properly nested. it has however been extensively human-checked, and i will absolutely keep an eye on bugs, or discord contact regarding any issues that are found, 
-i have intentionally ran this on complicated effect files to ensure there is no issues (i format weirdly to make sure my effects arent hundreds of lines long) and verified its accuracy. but i always welcome feedback, with a ._print_tree() statement and the file attached. 
-The writer is entirely human made by myself.
+## AI Notice 
+The "ParadoxParser" was almost entirely created by an AI language model, human checked, with components (such as writer and templates) being produced by myself too. 
+as such its intended use is for personal, hobbyist or education use only. It is intended as a community resource, for personal, hobbyist or educational uses only, 
+Corporate Appropriation (even for free usage) and any monetisation is strictly prohibited. no human wrote this tool. no human should claim ownership, this tool was designed to be freely used, and it must remain free. 
+
+## AI Notice
+
+The "ParadoxParser" was created almost entirely by an AI language model, with certain components (such as writers and templates) produced by me and human checked for correctness.
+This software is intended solely for personal, hobbyist, or educational use. Corporate appropriation — even for free usage — and any monetization are strictly prohibited.  
+No human should claim ownership. This tool is designed to be freely used and must remain free for its intended purposes.
+
+**License:** This software is released under the [PolyForm Noncommercial License](#LICENSE) (to be included in this repository), which legally enforces these usage restrictions.
