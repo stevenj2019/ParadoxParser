@@ -1,5 +1,5 @@
 import os, re, jinja2
-from ParadoxNodes import (GenericNode, GenericKeyValue, GenericBlock,
+from .ParadoxNodes import (GenericNode, GenericKeyValue, GenericBlock,
                           GenericLogic, GenericFlow, GenericTrigger, 
                           GenericList,
                           GenericFloat, GenericInt, GenericString,
