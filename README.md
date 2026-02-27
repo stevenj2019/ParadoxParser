@@ -6,14 +6,18 @@ This is just python code, you WILL require python coding knowledge, to make use 
 
 it handles all paradox differences as well as developer preference
 e.g. 
+```
 limit = { check_variable = { var = x } 
-and 
+```
+<br> and <br>
+```
 limit = 
-{
-    check_variable = {
+{ 
+    check_variable = { 
       var = x 
-    }
+    } 
 }
+```
 will be treat identically, (because they are)
 ## Installation 
 ``` pip install git+https://github.com/stevenj2019/ParadoxParser.git```
