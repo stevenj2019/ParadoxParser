@@ -1,20 +1,22 @@
 import os, re, jinja2
-from .ParadoxNodes import (GenericNode, GenericKeyValue, GenericBlock,
-                          GenericLogic, GenericFlow, GenericTrigger, 
-                          GenericList,
-                          GenericFloat, GenericInt, GenericString,
-                          GenericBool, GenericToken, 
-                          GenericComparator)
+from pathlib import Path
+from .ParadoxNodes import ( GenericNode, GenericKeyValue, 
+                            GenericBlock, GenericLogic, GenericFlow, 
+                            GenericTrigger, GenericList,
+                            GenericFloat, GenericInt, GenericString,
+                            GenericBool, GenericToken, 
+                            GenericComparator)
 from .constants import (LOGIC_FLOW_KEYS, LOGIC_KEYS, TRIGGER_KEYS)
 
 #Parse a single Paradox script file (*.txt/*.gfx/*.gui(though idk why you would))
 class ParadoxScriptParser:
-    def __init__(self, path: os.PathLike, encoding: str = "UTF-8"):
-        self.filepath = path
-        _, self.filename = path.split()
+    def __init__(self, path: os.PathLike|str, encoding: str = "UTF-8"):
+        
+        self.filepath = Path(path)
+        self.filename = self.filepath.name
         self.encoding = encoding
         self.nodes: list[GenericNode] = []
-        self.jinja_env = jinja2.Environment(loader=jinja2.PackageLoader("templates/"))
+        self.jinja_env = jinja2.Environment(loader=jinja2.PackageLoader("ParadoxParser", "templates"))
         self._parse_file()
 
     # ==========================================================
