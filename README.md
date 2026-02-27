@@ -27,12 +27,6 @@ will be treat identically, (because they are)
 ## Known Limitation (will never address)
 * the Writer Part of this module will follow formatting best practices (as commonly agreed by community and wiki), if you care, sorry, i format weirdly too, ill let this fix it for me :D
 
-
-## AI Notice 
-The "ParadoxParser" was almost entirely created by an AI language model, human checked, with components (such as writer and templates) being produced by myself too. 
-as such its intended use is for personal, hobbyist or education use only. It is intended as a community resource, for personal, hobbyist or educational uses only, 
-Corporate Appropriation (even for free usage) and any monetisation is strictly prohibited. no human wrote this tool. no human should claim ownership, this tool was designed to be freely used, and it must remain free. 
-
 ## AI Notice
 
 The "ParadoxParser" was created almost entirely by an AI language model, with certain components (such as writers and templates) produced by me and human checked for correctness.
