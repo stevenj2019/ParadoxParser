@@ -13,4 +13,4 @@ limit =
 }
 
 are treated as identical by the parser! 
-and as such, i wont guaruntee it, on its own, this is unhelpful to those who dont know python, please check your objects and your work before commiting any changes using ParadoxWriter (a seperate module) 
+and as such, i wont guaruntee it, on its own, this is unhelpful to those who dont know python, please check your objects and your work before commiting any changes using ParadoxWriter (a seperate module) which can be found [here](https://github.com/stevenj2019/ParadoxWriter)
