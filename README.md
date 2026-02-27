@@ -2,7 +2,7 @@
 A complex Paradox Parser, utilising tokenisation and structural clues to build a paradox file as a series of nested python objects, in order to preserve code structure, i found other parsers were either baked into software, or incomplete/destructive handling, (e.g. successful got meradata, but destroyed trigger/effect code) 
 
 This is just python code, you WILL require python coding knowledge, to make use of it, 
-when i have finished it, ill add an example folder, with some scripts, as usable examples) 
+[examples gist](https://gist.github.com/stevenj2019/04b322de5374b9f0cec8dadfd2eb7c6d)
 
 it handles all paradox differences as well as developer preference
 e.g. 
