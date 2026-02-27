@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ParadoxParder"
+version = "0.0.1"
+dependencies = []
+requires-python = ">=3.11"
+authors = [
+  {name = "Stevenj2019", email = "steven.j2019@protonmail.com"},
+]
+readme = "README.md"
