@@ -44,7 +44,7 @@ remove + install it
 
 ## AI Notice
 
-The "ParadoxParser" was created almost entirely by an AI language model, with certain components (such as writers and templates) produced by me and human checked for correctness.
+The "ParadoxParser" was created almost entirely by an AI language model and human checked for correctness.
 This software is intended solely for personal, hobbyist, or educational use. Corporate appropriation — even for free usage — and any monetization are strictly prohibited.  
 No human should claim ownership of AI works. This tool is designed to be freely used and must remain free for its intended purposes.
 
