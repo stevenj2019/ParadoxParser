@@ -33,11 +33,11 @@ remove + install it
 ```
   pip install -r requirements.txt
   python -m build 
-  pip install dist/ParadoxParser-0.9.0-py3-none-any.whl
+  pip install dist/ParadoxParser-1.0py3-none-any.whl
 ```
 
 ## Known Limitation (will address)
-* preserve comments, as a custom object, so it can be easily removed in script
+* preserve comments, as a custom object, so it can be easily removed in script (done)
 
 ## Known Limitation (will never address)
 * the Writer Part of this module will follow formatting best practices (as commonly agreed by community and wiki), if you care, sorry, i format weirdly too, ill let this fix it for me :D
