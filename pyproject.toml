@@ -7,7 +7,7 @@ packages = ["ParadoxParser"]
 
 [project]
 name = "ParadoxParser"
-version = "1.0"
+version = "1.1"
 requires-python = ">=3.11"
 authors = [
   {name = "steven.j2019", email = "steven.j2019@protonmail.com"},

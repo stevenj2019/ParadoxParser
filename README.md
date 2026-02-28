@@ -33,7 +33,7 @@ remove + install it
 ```
   pip install -r requirements.txt
   python -m build 
-  pip install dist/ParadoxParser-1.0py3-none-any.whl
+  pip install dist/ParadoxParser-1.1py3-none-any.whl
 ```
 
 ## Known Limitation (will address)

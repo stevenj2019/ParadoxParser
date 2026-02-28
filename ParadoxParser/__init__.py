@@ -41,17 +41,39 @@ class ParadoxScriptParser:
     # TOKENIZER
     # ==========================================================
 
+    # def _tokenize(self, text: str) -> list[str]:
+    #     """
+    #     Order matters:
+    #     - Quoted strings first (atomic)
+    #     - Braces
+    #     - Equals
+    #     - Everything else as non-whitespace sequences
+    #     """
+    #     # pattern = r'"(?:\\.|[^"\\])*"|\{|\}|=|>|<|\S+'
+    #     pattern = r'"(?:\\.|[^"\\])*"|#.*|\{|\}|=|>|<|\S+'
+    #     return re.findall(pattern, text)
     def _tokenize(self, text: str) -> list[str]:
         """
-        Order matters:
-        - Quoted strings first (atomic)
-        - Braces
-        - Equals
-        - Everything else as non-whitespace sequences
+        Tokenize Paradox script text.
+        First pass: split by whitespace, braces, quotes.
+        Second pass: split tokens further if special characters are glued to words.
         """
-        # pattern = r'"(?:\\.|[^"\\])*"|\{|\}|=|>|<|\S+'
-        pattern = r'"(?:\\.|[^"\\])*"|#.*|\{|\}|=|>|<|\S+'
-        return re.findall(pattern, text)
+        # Step 1: Basic tokenization (works for most cases)
+        basic_tokens = re.findall(r'"(?:\\.|[^"\\])*"|#.*|\{|\}|\S+', text)
+
+        # Step 2: Post-process tokens that have glued special characters
+        final_tokens = []
+        for token in basic_tokens:
+            # Skip comments and quoted strings
+            if token.startswith('"') or token.startswith('#'):
+                final_tokens.append(token)
+                continue
+
+            # Split token on =, <, > but keep them
+            split_tokens = re.split(r'([=<>])', token)
+            final_tokens.extend([t for t in split_tokens if t])  # remove empty strings
+
+        return final_tokens
 
     def _peek(self):
         if self.pos < len(self.tokens):
