@@ -1,8 +1,8 @@
 {##NOTE - This iterates over all the nodes, and child nodes, children, hopefully#}
-{{'\t'*ns.indent}}{{object.key}} = {
+{{'\t'*ns.indent}}{{pdx_object.key}} = {
     {% set ns.indent = ns.indent + 1 %}
-    {% for child in object.nodes %}
-        {% include "inner_line_compiler.txt.jinja" with object=child %} {#<=Secret sauce#}
+    {% for child in pdx_object.nodes %}
+        {% include "inner_line_compiler.txt.jinja" with pdx_object=child %}
     {% endfor %}
     {% set ns.indent = ns.indent - 1 %}
 {{'\t'*ns.indent}}}

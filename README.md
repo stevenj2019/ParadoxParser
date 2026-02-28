@@ -19,8 +19,23 @@ limit =
 }
 ```
 will be treat identically, (because they are)
+
 ## Installation 
 ``` pip install git+https://github.com/stevenj2019/ParadoxParser.git```
+## Removal 
+``` pip uninstall ParadoxParser ```
+## Update 
+remove + install it 
+## Local Build 
+1. download the repo as a zip 
+2. unzip it somewhere 
+3. go to it in your preferred terminal 
+```
+  pip install -r requirements.txt
+  python -m build 
+  pip install dist/ParadoxParser-0.9.0-py3-none-any.whl
+```
+
 ## Known Limitation (will address)
 * preserve comments, as a custom object, so it can be easily removed in script
 

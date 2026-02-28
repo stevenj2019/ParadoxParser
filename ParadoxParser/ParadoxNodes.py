@@ -8,6 +8,10 @@ class GenericNode:
     def _get_value(self)->str|int|float|bool:
         return self.value
     
+    def _to_string_literal(self, indent: int = 0) -> str:
+        tabs = "\t" * indent
+        return f"{tabs}{self._get_value()}\n"
+    
 class GenericKeyValue(GenericNode):
     def __init__(self, key: str, value:GenericNode):
         self.key = key
@@ -16,13 +20,28 @@ class GenericKeyValue(GenericNode):
     def _get_value(self)->str:
         return f"{self.key} = {self.value.get_value}"
 
+    def _to_string_literal(self, indent: int = 0) -> str:
+        tabs = "\t" * indent
+        return f"{tabs}{self.key} = {self.value._get_value()}\n"
+    
 class GenericBlock(GenericNode):
     def __init__(self, key: str = None):
         self.key = key
         self.children:list[GenericNode] = []
 
-    def _get_value(self)->dict[str, GenericNode]:
-        return {self.key: self.children}
+    # def _get_value(self)->dict[str, GenericNode]:
+    #     return {self.key: self.children}
+
+    def _to_string_literal(self, indent: int = 0) -> str:
+        tabs = "\t" * indent
+
+        output = f"{tabs}{self.key} = {{\n"
+
+        for child in self.children:
+            output += child._to_string_literal(indent + 1)
+
+        output += f"{tabs}}}\n"
+        return output
 
 ###                    ###
 # FLAVOUR CLASSES - NODE # - There is every chance these can be deleted, will check when i have the frontend running ig?
@@ -52,6 +71,10 @@ class GenericBool(GenericNode):
 
     def _get_value(self)->str:
         return "yes" if self.value else "no"
+    
+    def _to_string_literal(self, indent: int = 0) -> str:
+        tabs = "\t" * indent
+        return f"{tabs}{self._get_value()}\n"
 
 class GenericComparator(GenericNode):
     def __init__(self, left:str, operator:str, right:str):
@@ -60,7 +83,7 @@ class GenericComparator(GenericNode):
         self.right = right
 
     def _get_value(self)->str:
-        return "{self.left} {self.operator} {self.right}"
+        return f"{self.left} {self.operator} {self.right}" 
     
 ###                       ###
 # SPCIALIST CLASSES - BLOCK #

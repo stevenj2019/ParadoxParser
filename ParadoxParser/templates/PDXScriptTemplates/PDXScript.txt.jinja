@@ -1,5 +1,6 @@
-{#NOTE - This launches the iter (hopefully)}
-{% set ns = namespace(indent=0)%}
-{% for object in file.nodes recursive %}
-    {% include "inner_line_compiler.txt.jinja"%} {#<- Secret Sauce#}
+{% import "inner_line_compiler.txt.jinja" as compiler %}
+
+{% set ns = namespace(indent=0) %}
+{% for obj in pdx_file.nodes %}
+{{ compiler.render_node(obj, ns, GenericNode, GenericBlock, GenericKeyValue) }}
 {% endfor %}

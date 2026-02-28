@@ -1,5 +1,6 @@
 import os, re, jinja2
 from pathlib import Path
+import shutil
 from .ParadoxNodes import ( GenericNode, GenericKeyValue, 
                             GenericBlock, GenericLogic, GenericFlow, 
                             GenericTrigger, GenericList,
@@ -16,7 +17,9 @@ class ParadoxScriptParser:
         self.filename = self.filepath.name
         self.encoding = encoding
         self.nodes: list[GenericNode] = []
-        self.jinja_env = jinja2.Environment(loader=jinja2.PackageLoader("ParadoxParser", "templates"))
+        self.jinja_env = jinja2.Environment(loader=jinja2.PackageLoader("ParadoxParser", "templates/PDXScriptTemplates"))
+        self.jinja_env.globals.update(isinstance=isinstance) #this pisses me off
+        self.root_template = self.jinja_env.get_template("PDXScript.txt.jinja")
         self._parse_file()
 
     # ==========================================================
@@ -177,10 +180,19 @@ class ParadoxScriptParser:
                 print(f"{prefix}Token: {node.value}")
 
     def _backup_file(self):
-        #TODO just copy the self.filename to self.filename.replace(".txt", ".bak")
-        return
+        shutil.copyfile(self.filepath, self.filepath.with_suffix(self.filepath.suffix + ".bak"))
+
     
-    def _write_file(self):
-        self._backup_file()
-        return jinja2.render_template(self.jinja_env.get_template("PDXScript.txt.jinja"), 
-                                      object = self)
+    def _to_pdx_script_file(self):
+        output = ""
+        for node in self.nodes:
+            output += node._to_string_literal(indent=0)
+
+        with open(self.filepath, "w", encoding="utf-8") as f:
+            f.write(output)
+    #     with open(self.filepath, "r+") as FILE:
+    #         FILE.write(self.root_template.render( pdx_file = self,
+    #                                               isinstance=isinstance,
+    #                                               GenericNode=GenericNode,
+    #                                               GenericBlock=GenericBlock,
+    #                                               GenericKeyValue=GenericKeyValue))
