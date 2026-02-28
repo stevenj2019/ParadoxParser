@@ -9,10 +9,8 @@ from .ParadoxNodes import ( GenericNode, GenericKeyValue,
                             GenericComparator)
 from .constants import (LOGIC_FLOW_KEYS, LOGIC_KEYS, TRIGGER_KEYS)
 
-#Parse a single Paradox script file (*.txt/*.gfx/*.gui(though idk why you would))
 class ParadoxScriptParser:
     def __init__(self, path: os.PathLike|str, encoding: str = "UTF-8"):
-        
         self.filepath = Path(path)
         self.filename = self.filepath.name
         self.encoding = encoding
@@ -22,58 +20,35 @@ class ParadoxScriptParser:
     # ==========================================================
     # FILE LOADING
     # ==========================================================
-
     def _parse_file(self):
         with open(self.filepath, "r", encoding=self.encoding) as f:
             text = f.read()
 
-        # Remove comments
-        # text = re.sub(r"#.*", "", text)
-
-        # Tokenize
         self.tokens = self._tokenize(text)
         self.pos = 0
-
-        # Parse root scope
         self.nodes = self._parse_scope()
 
     # ==========================================================
     # TOKENIZER
     # ==========================================================
-
-    # def _tokenize(self, text: str) -> list[str]:
-    #     """
-    #     Order matters:
-    #     - Quoted strings first (atomic)
-    #     - Braces
-    #     - Equals
-    #     - Everything else as non-whitespace sequences
-    #     """
-    #     # pattern = r'"(?:\\.|[^"\\])*"|\{|\}|=|>|<|\S+'
-    #     pattern = r'"(?:\\.|[^"\\])*"|#.*|\{|\}|=|>|<|\S+'
-    #     return re.findall(pattern, text)
     def _tokenize(self, text: str) -> list[str]:
         """
         Tokenize Paradox script text.
-        First pass: split by whitespace, braces, quotes.
-        Second pass: split tokens further if special characters are glued to words.
+        Handles:
+        - key="value with spaces"
+        - quoted strings
+        - comments (# kept as tokens)
+        - braces and operators
+        - IDs with dots like arg.1
         """
-        # Step 1: Basic tokenization (works for most cases)
-        basic_tokens = re.findall(r'"(?:\\.|[^"\\])*"|#.*|\{|\}|\S+', text)
-
-        # Step 2: Post-process tokens that have glued special characters
-        final_tokens = []
-        for token in basic_tokens:
-            # Skip comments and quoted strings
-            if token.startswith('"') or token.startswith('#'):
-                final_tokens.append(token)
-                continue
-
-            # Split token on =, <, > but keep them
-            split_tokens = re.split(r'([=<>])', token)
-            final_tokens.extend([t for t in split_tokens if t])  # remove empty strings
-
-        return final_tokens
+        token_pattern = r'''
+            "[^"\\]*(?:\\.[^"\\]*)*"      |   # quoted strings
+            \#.*                           |   # comments (entire rest of line)
+            [{}=<>]                         |   # braces and operators
+            [a-zA-Z0-9_.]+                  |   # bare words/keys with dots
+            \S                               # any other single char
+        '''
+        return re.findall(token_pattern, text, re.VERBOSE)
 
     def _peek(self):
         if self.pos < len(self.tokens):
@@ -88,19 +63,16 @@ class ParadoxScriptParser:
     # ==========================================================
     # CORE PARSER
     # ==========================================================
-
     def _parse_scope(self) -> list[GenericNode]:
         nodes = []
-
         while self.pos < len(self.tokens):
             token = self._peek()
 
             if token == "}":
-                self._next()  # consume
+                self._next()
                 break
-
             if token == "{":
-                self._next()  # consume stray open brace
+                self._next()
                 continue
 
             nodes.append(self._parse_statement())
@@ -110,19 +82,19 @@ class ParadoxScriptParser:
     def _parse_statement(self) -> GenericNode:
         key = self._next()
 
+        # COMMENT HANDLING
         if key.startswith("#"):
             return GenericComment(key)
-        # If next token is "=" we have a key-value or block
+
+        # KEY=VALUE or KEY { BLOCK }
         if self._peek() == "=":
             self._next()  # consume "="
             next_token = self._peek()
 
             # BLOCK
             if next_token == "{":
-                self._next()  # consume "{"
+                self._next()
                 children = self._parse_scope()
-
-                # Determine block type
                 if all(isinstance(c, GenericToken) for c in children):
                     block = GenericList(key)
                 else:
@@ -134,46 +106,39 @@ class ParadoxScriptParser:
                         block = GenericFlow(key)
                     else:
                         block = GenericBlock(key)
-
                 block.children = children
                 return block
-        
             # SIMPLE KEY VALUE
             else:
                 value_token = self._next()
                 value_node = self._parse_value(value_token)
                 return GenericKeyValue(key, value_node)
-            
-        ###comparator
+
+        # COMPARATOR
         if self._peek() in ["<", ">"]:
-            operator = self._next() 
+            operator = self._next()
             value = self._next()
             return GenericComparator(key, operator, value)
-        
-        # Bare token fallback (used inside lists)
+
+        # BARE TOKEN FALLBACK
         return self._parse_value(key)
 
     # ==========================================================
     # VALUE PARSER
     # ==========================================================
-
     def _parse_value(self, token: str) -> GenericNode:
-        # Strings are atomic — never parsed internally
         if token.startswith('"') and token.endswith('"'):
             return GenericString(token)
-
         if token.lower() == "yes":
             return GenericBool(True)
-
         if token.lower() == "no":
             return GenericBool(False)
-
         if re.fullmatch(r"-?\d+", token):
             return GenericInt(int(token))
-
         if re.fullmatch(r"-?\d+\.\d+", token):
             return GenericFloat(float(token))
-
+        if token.startswith("#"):
+            return GenericComment(token)
         return GenericToken(token)
 
     # ==========================================================
