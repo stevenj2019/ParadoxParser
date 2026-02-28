@@ -65,6 +65,10 @@ class GenericToken(GenericNode):
 ###                      ###
 # SPCIALIST CLASSES - NODE #
 ###                      ###
+class GenericComment(GenericNode):
+    def __init__(self, value:str):
+        super().__init__(value)
+        
 class GenericBool(GenericNode):
     def __init__(self, value: bool):
         self.value = value
@@ -84,7 +88,7 @@ class GenericComparator(GenericNode):
 
     def _get_value(self)->str:
         return f"{self.left} {self.operator} {self.right}" 
-    
+
 ###                       ###
 # SPCIALIST CLASSES - BLOCK #
 ###                       ###

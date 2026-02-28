@@ -5,7 +5,7 @@ from .ParadoxNodes import ( GenericNode, GenericKeyValue,
                             GenericBlock, GenericLogic, GenericFlow, 
                             GenericTrigger, GenericList,
                             GenericFloat, GenericInt, GenericString,
-                            GenericBool, GenericToken, 
+                            GenericBool, GenericToken, GenericComment,
                             GenericComparator)
 from .constants import (LOGIC_FLOW_KEYS, LOGIC_KEYS, TRIGGER_KEYS)
 
@@ -31,7 +31,7 @@ class ParadoxScriptParser:
             text = f.read()
 
         # Remove comments
-        text = re.sub(r"#.*", "", text)
+        # text = re.sub(r"#.*", "", text)
 
         # Tokenize
         self.tokens = self._tokenize(text)
@@ -52,7 +52,8 @@ class ParadoxScriptParser:
         - Equals
         - Everything else as non-whitespace sequences
         """
-        pattern = r'"(?:\\.|[^"\\])*"|\{|\}|=|>|<|\S+'
+        # pattern = r'"(?:\\.|[^"\\])*"|\{|\}|=|>|<|\S+'
+        pattern = r'"(?:\\.|[^"\\])*"|#.*|\{|\}|=|>|<|\S+'
         return re.findall(pattern, text)
 
     def _peek(self):
@@ -90,6 +91,8 @@ class ParadoxScriptParser:
     def _parse_statement(self) -> GenericNode:
         key = self._next()
 
+        if key.startswith("#"):
+            return GenericComment(key)
         # If next token is "=" we have a key-value or block
         if self._peek() == "=":
             self._next()  # consume "="
