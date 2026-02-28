@@ -29,8 +29,36 @@ class GenericBlock(GenericNode):
         self.key = key
         self.children:list[GenericNode] = []
 
-    # def _get_value(self)->dict[str, GenericNode]:
-    #     return {self.key: self.children}
+    # ==========================================================
+    # Recursive Traversal
+    # ==========================================================
+    def traverse(self, callback, include_self=True):
+        """
+        Recursively traverse self and all children.
+        - callback: a function that takes a node and can modify it.
+        - include_self: if True, applies callback to this node first.
+        """
+        if include_self:
+            callback(self)
+        
+        for child in self.children:
+            callback(child)
+            if isinstance(child, GenericBlock):
+                child.traverse(callback, include_self=False)
+
+    # CRUD helpers
+    def add_child(self, child: GenericNode):
+        self.children.append(child)
+
+    def remove_child(self, child: GenericNode):
+        if child in self.children:
+            self.children.remove(child)
+
+    def update_child(self, old_child: GenericNode, new_child: GenericNode):
+        for i, c in enumerate(self.children):
+            if c is old_child:
+                self.children[i] = new_child
+                break
 
     def _to_string_literal(self, indent: int = 0) -> str:
         tabs = "\t" * indent
@@ -68,7 +96,7 @@ class GenericToken(GenericNode):
 class GenericComment(GenericNode):
     def __init__(self, value:str):
         super().__init__(value)
-        
+
 class GenericBool(GenericNode):
     def __init__(self, value: bool):
         self.value = value

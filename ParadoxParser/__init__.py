@@ -1,4 +1,4 @@
-import os, re, jinja2
+import os, re
 from pathlib import Path
 import shutil
 from .ParadoxNodes import ( GenericNode, GenericKeyValue, 
@@ -17,9 +17,6 @@ class ParadoxScriptParser:
         self.filename = self.filepath.name
         self.encoding = encoding
         self.nodes: list[GenericNode] = []
-        self.jinja_env = jinja2.Environment(loader=jinja2.PackageLoader("ParadoxParser", "templates/PDXScriptTemplates"))
-        self.jinja_env.globals.update(isinstance=isinstance) #this pisses me off
-        self.root_template = self.jinja_env.get_template("PDXScript.txt.jinja")
         self._parse_file()
 
     # ==========================================================
