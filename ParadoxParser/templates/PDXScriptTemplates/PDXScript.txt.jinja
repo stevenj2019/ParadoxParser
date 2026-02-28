@@ -1,6 +1,0 @@
-{% import "inner_line_compiler.txt.jinja" as compiler %}
-
-{% set ns = namespace(indent=0) %}
-{% for obj in pdx_file.nodes %}
-{{ compiler.render_node(obj, ns, GenericNode, GenericBlock, GenericKeyValue) }}
-{% endfor %}
