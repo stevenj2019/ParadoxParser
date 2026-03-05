@@ -1,6 +1,15 @@
 ###          ###
 # BASE CLASSES #
 ###          ###
+class GenericLocKey:
+    def __init__(self, key:str, num:str, value:str):
+        self.key = key
+        self.num = int(num)
+        self.value = str(value)
+
+    def _to_string_litteral(self):
+        return f"\n\t{self.key}:{self.num} \"{self.value}\""
+    
 class GenericNode:
     def __init__(self, value:str|int|float|bool):
         self.value = value
