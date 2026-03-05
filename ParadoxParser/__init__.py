@@ -58,7 +58,7 @@ class ParadoxScriptParser:
         Second pass: split tokens further if special characters are glued to words.
         """
         # Step 1: Basic tokenization (works for most cases)
-        basic_tokens = re.findall(r'"(?:\\.|[^"\\])*"|#.*|\{|\}|\S+', text)
+        basic_tokens = re.findall(r'"(?:\\.|[^"\\])*"|#.*|\{|\}|[^\s{}]+', text)
 
         # Step 2: Post-process tokens that have glued special characters
         final_tokens = []
