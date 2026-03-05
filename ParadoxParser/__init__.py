@@ -178,7 +178,7 @@ class ParadoxScriptParser:
     def _backup_file(self):
         shutil.copyfile(self.filepath, self.filepath.with_suffix(self.filepath.suffix + ".bak"))
 
-    def _to_pdx_script_file(self):
+    def _to_pdx_file(self):
         output = ""
         for node in self.nodes:
             output += node._to_string_literal(indent=0)
@@ -231,7 +231,7 @@ class ParadoxLocParser:
 
                     self.nodes.append(GenericLocKey(key, num, value))
 
-    def _to_pdx_script_file(self):
+    def _to_pdx_file(self):
         output = f"l_{self.language_key}:"
 
         for node in self.nodes:
