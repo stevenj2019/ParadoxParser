@@ -20,12 +20,10 @@ limit =
 ```
 will be treat identically, (because they are)
 
-## Installation 
+## Installation/Update 
 ``` pip install git+https://github.com/stevenj2019/ParadoxParser.git```
 ## Removal 
 ``` pip uninstall ParadoxParser ```
-## Update 
-remove + install it 
 ## Local Build 
 1. download the repo as a zip 
 2. unzip it somewhere 
