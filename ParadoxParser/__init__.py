@@ -6,13 +6,12 @@ from .ParadoxNodes import ( GenericNode, GenericKeyValue,
                             GenericTrigger, GenericList,
                             GenericFloat, GenericInt, GenericString,
                             GenericBool, GenericToken, GenericComment,
-                            GenericComparator)
+                            GenericComparator, GenericLocKey)
 from .constants import (LOGIC_FLOW_KEYS, LOGIC_KEYS, TRIGGER_KEYS)
 
 #Parse a single Paradox script file (*.txt/*.gfx/*.gui(though idk why you would))
 class ParadoxScriptParser:
     def __init__(self, path: os.PathLike|str, encoding: str = "UTF-8"):
-        
         self.filepath = Path(path)
         self.filename = self.filepath.name
         self.encoding = encoding
@@ -176,45 +175,67 @@ class ParadoxScriptParser:
 
         return GenericToken(token)
 
-    # ==========================================================
-    # DEBUG TREE PRINTER
-    # ==========================================================
-
-    def print_tree(self, nodes=None, indent=0):
-        if nodes is None:
-            nodes = self.nodes
-
-        for node in nodes:
-            prefix = "    " * indent
-
-            if isinstance(node, GenericList):
-                values = ", ".join(str(c.value) for c in node.children)
-                print(f"{prefix}List: {node.key} [{values}]")
-
-            elif isinstance(node, GenericBlock):
-                print(f"{prefix}Block: {node.key} ({len(node.children)} children)")
-                self.print_tree(node.children, indent + 1)
-
-            elif isinstance(node, GenericKeyValue):
-                print(f"{prefix}KV: {node.key} = {node.value.value}")
-
-            else:
-                print(f"{prefix}Token: {node.value}")
-
     def _backup_file(self):
         shutil.copyfile(self.filepath, self.filepath.with_suffix(self.filepath.suffix + ".bak"))
 
-    
     def _to_pdx_script_file(self):
         output = ""
         for node in self.nodes:
             output += node._to_string_literal(indent=0)
 
-        with open(self.filepath, "w", encoding="utf-8") as f:
+        with open(self.filepath, "w", encoding=self.encoding) as f:
             f.write(output)
-    #     with open(self.filepath, "r+") as FILE:
-    #         FILE.write(self.root_template.render( pdx_file = self,
-    #                                               isinstance=isinstance,
-    #                                               GenericNode=GenericNode,
-    #                                               GenericBlock=GenericBlock,
-    #                                               GenericKeyValue=GenericKeyValue))
+
+#Parse a single Paradox loc file (*.yml)
+class ParadoxLocParser:
+    def __init__(self, path:os.PathLike|str, encoding:str="utf-8-sig"):
+        self.filepath = Path(path)
+        self.filename = self.filepath.name
+        self.encoding = encoding
+        self.language_key:str = ""
+        self.nodes: list[GenericNode] = []
+        self._parse_file()
+
+    def _parse_file(self):
+        """Parse Paradox localization file into nodes preserving comments."""
+        with open(self.filepath, "r", encoding="utf-8-sig") as f:
+            for line in f:
+                stripped = line.strip()
+                if not stripped:
+                    continue
+                
+                if stripped.startswith("l_"):
+                    self.language_key = stripped.split(":")[0]
+
+                # Preserve comments as GenericComment
+                if stripped.startswith("#"):
+                    self.nodes.append(GenericComment(stripped))
+                    continue
+
+                # Skip headers
+                if stripped.endswith(":") and not '"' in stripped:
+                    continue
+
+                # Try to parse loc key
+                match = re.compile(r'^\s*([A-Za-z0-9_.-]+):(?:(\d+))?\s*(?:"([^"]*)")?').match(stripped)
+                if match:
+                    key, num, value = match.groups()
+                    num = int(num) if num is not None else 0
+
+                    # preserve quotes if present
+                    quote_match = re.search(r'"(.*)"', line)
+                    if quote_match:
+                        value = quote_match.group(1)
+                    else:
+                        value = value or ""
+
+                    self.nodes.append(GenericLocKey(key, num, value))
+
+    def _to_pdx_script_file(self):
+        output = f"l_{self.language_key}:"
+
+        for node in self.nodes:
+            output += node._to_string_literal(indent=0)
+
+        with open(self.filepath, "w", encoding=self.encoding) as f:
+            f.write(output)
