@@ -42,8 +42,8 @@ class ParadoxScriptParser:
         - IDs with dots like arg.1
         """
         # Step 1: Basic tokenization (works for most cases)
-        basic_tokens = re.findall(r'"(?:\\.|[^"\\])*"|#.*|\{|\}|[^\s{}]+', text)
-
+        # basic_tokens = re.findall(r'"(?:\\.|[^"\\])*"|#.*|\{|\}|[^\s{}]+', text)
+        basic_tokens = re.findall(r'"[^"]*"|#.*|\{|\}|[^\s{}"]+', text)
         # Step 2: Post-process tokens that have glued special characters
         final_tokens = []
         for token in basic_tokens:
@@ -52,9 +52,12 @@ class ParadoxScriptParser:
                 final_tokens.append(token)
                 continue
 
-            # Split token on =, <, > but keep them
-            split_tokens = re.split(r'([=<>])', token)
-            final_tokens.extend([t for t in split_tokens if t])  # remove empty strings
+            # Only split tokens that actually contain operators
+            if any(op in token for op in "=<>"):
+                split_tokens = re.split(r'([=<>])', token)
+                final_tokens.extend(t for t in split_tokens if t)
+            else:
+                final_tokens.append(token)
 
         return final_tokens
 

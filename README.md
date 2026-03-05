@@ -7,7 +7,7 @@ This is just python code, you WILL require python coding knowledge, to make use 
 it handles all paradox differences as well as developer preference
 e.g. 
 ```
-limit = { check_variable = { var = x } 
+limit = { check_variable = { var = x } }
 ```
 <br> and <br>
 ```
@@ -33,7 +33,7 @@ remove + install it
 ```
   pip install -r requirements.txt
   python -m build 
-  pip install dist/ParadoxParser-1.2py3-none-any.whl
+  pip install dist/ParadoxParser-1.3py3-none-any.whl
 ```
 
 ## Known Limitation (will address)
@@ -49,3 +49,19 @@ This software is intended solely for personal, hobbyist, or educational use. Cor
 No human should claim ownership of AI works. This tool is designed to be freely used and must remain free for its intended purposes.
 
 **License:** This software is released under the [PolyForm Noncommercial License](#LICENSE) (to be included in this repository), which legally enforces these usage restrictions.
+
+## Changelog
+### 1.0 initial release - MVP
+- basic Parser, produced minimal structure to not break a file, 
+### 1.1 Comments, and fixes
+- provides minor fixes to the parser in cases of event_ids "<str>.<int>"
+- support GenericComment Node, to store comments and preserve their whitespace/newline 
+### 1.2 advanced variable usage fix
+- proves support for token:var and var:var structures, to preserve their structure
+- added ParadoxLocParser, read-only testing completed
+### 1.3 name hotfix
+- fixes string support when operator or punctuation in string ":, =, <, >, ."
+
+This is mainly being modified as i find issues in ParadoxEdit (a currently hidden github project, if you notice a bug i have not yet, feel free to raise it)
+
+## by 2.0 i intent to have a bugfree parser toolset
