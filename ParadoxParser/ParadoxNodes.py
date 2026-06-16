@@ -34,10 +34,11 @@ class GenericKeyValue(GenericNode):
         return f"{tabs}{self.key} = {self.value._get_value()}\n"
     
 class GenericBlock(GenericNode):
-    def __init__(self, key: str = None):
+    def __init__(self, key:str=None, children:list=None):
         self.key = key
         self.children:list[GenericNode] = []
-
+        if children:
+            self.children.extend(children)
     # ==========================================================
     # Recursive Traversal
     # ==========================================================
