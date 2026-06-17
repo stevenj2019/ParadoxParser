@@ -33,6 +33,9 @@ class GenericKeyValue(GenericNode):
         tabs = "\t" * indent
         return f"{tabs}{self.key} = {self.value._get_value()}\n"
     
+    def _get_key_val(self):
+        return self.key, self.value
+    
 class GenericBlock(GenericNode):
     def __init__(self, key:str=None, children:list=None):
         self.key = key
