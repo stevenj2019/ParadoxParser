@@ -35,7 +35,7 @@ will be treat identically, (because they are)
 ```
 
 ## Known Limitation (will address)
-* preserve comments, as a custom object, so it can be easily removed in script (done)
+* Currently None (notice any? let me know, i'll fix.)
 
 ## Known Limitation (will never address)
 * the Writer Part of this module will follow formatting best practices (as commonly agreed by community and wiki), if you care, sorry, i format weirdly too, ill let this fix it for me :D
