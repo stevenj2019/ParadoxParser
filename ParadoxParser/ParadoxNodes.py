@@ -109,7 +109,11 @@ class GenericToken(GenericNode):
 class GenericComment(GenericNode):
     def __init__(self, value:str):
         super().__init__(value)
-
+    
+    def _to_string_literal(self, indent:int = 0) -> str:
+        tabs = "\t" * indent
+        return f"{tabs}#{self._get_value()}"
+    
 class GenericBool(GenericNode):
     def __init__(self, value: bool):
         self.value = value
