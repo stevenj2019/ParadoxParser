@@ -103,9 +103,9 @@ class GenericToken(GenericNode):
     def __init__(self, value: str):
         super().__init__(value)
 
-###                      ###
-# SPCIALIST CLASSES - NODE #
-###                      ###
+###                       ###
+# SPECIALIST CLASSES - NODE #
+###                       ###
 class GenericComment(GenericNode):
     def __init__(self, value:str):
         super().__init__(value)
