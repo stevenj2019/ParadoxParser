@@ -31,7 +31,7 @@ class GenericKeyValue(GenericNode):
 
     def _to_string_literal(self, indent: int = 0) -> str:
         tabs = "\t" * indent
-        return f"{tabs}{self.key} = {self.value._get_value()}\n"
+        return f"{tabs}{self.key} = {self.value._to_string_literal()}"
     
     def _get_key_val(self):
         return self.key, self.value
@@ -100,7 +100,8 @@ class GenericString(GenericNode):
         self.value = value.replace("\"", "")
 
     def _to_string_literal(self, indent = 0):
-        return f"\"{self._get_value()}\""
+        tabs = "\t" * indent
+        return f"{tabs}\"{self._get_value()}\"\n"
     
 class GenericToken(GenericNode):
     def __init__(self, value: str):
