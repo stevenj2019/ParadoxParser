@@ -97,8 +97,11 @@ class GenericFloat(GenericNode):
 
 class GenericString(GenericNode):
     def __init__(self, value: str):
-        super().__init__(value)
+        self.value = value.replace("\"", "")
 
+    def _to_string_literal(self, indent = 0):
+        return f"\"{self._get_value()}\""
+    
 class GenericToken(GenericNode):
     def __init__(self, value: str):
         super().__init__(value)
