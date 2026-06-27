@@ -105,8 +105,8 @@ class ParadoxScriptParser:
             # BLOCK
             if next_token == "{":
                 self._next()
-                children = self._parse_scope()
-                if all(isinstance(c, GenericToken) for c in children):
+                nodes = self._parse_scope()
+                if all(isinstance(c, GenericToken) for c in nodes):
                     block = GenericList(key)
                 else:
                     if key in TRIGGER_KEYS:
@@ -117,7 +117,7 @@ class ParadoxScriptParser:
                         block = GenericFlow(key)
                     else:
                         block = GenericBlock(key)
-                block.children = children
+                block.nodes = nodes
                 return block
             # SIMPLE KEY VALUE
             else:
