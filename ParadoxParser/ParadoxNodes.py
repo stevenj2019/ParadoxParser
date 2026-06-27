@@ -37,40 +37,40 @@ class GenericKeyValue(GenericNode):
         return self.key, self.value
     
 class GenericBlock(GenericNode):
-    def __init__(self, key:str=None, children:list=None):
+    def __init__(self, key:str=None, nodes:list=None):
         self.key = key
-        self.children:list[GenericNode] = []
-        if children:
-            self.children.extend(children)
+        self.nodes:list[GenericNode] = []
+        if nodes:
+            self.nodes.extend(nodes)
     # ==========================================================
     # Recursive Traversal
     # ==========================================================
     def traverse(self, callback, include_self=True):
         """
-        Recursively traverse self and all children.
+        Recursively traverse self and all nodes.
         - callback: a function that takes a node and can modify it.
         - include_self: if True, applies callback to this node first.
         """
         if include_self:
             callback(self)
         
-        for child in self.children:
+        for child in self.nodes:
             callback(child)
             if isinstance(child, GenericBlock):
                 child.traverse(callback, include_self=False)
 
     # CRUD helpers
     def add_child(self, child: GenericNode):
-        self.children.append(child)
+        self.nodes.append(child)
 
     def remove_child(self, child: GenericNode):
-        if child in self.children:
-            self.children.remove(child)
+        if child in self.nodes:
+            self.nodes.remove(child)
 
     def update_child(self, old_child: GenericNode, new_child: GenericNode):
-        for i, c in enumerate(self.children):
+        for i, c in enumerate(self.nodes):
             if c is old_child:
-                self.children[i] = new_child
+                self.nodes[i] = new_child
                 break
 
     def _to_string_literal(self, indent: int = 0) -> str:
@@ -78,7 +78,7 @@ class GenericBlock(GenericNode):
 
         output = f"{tabs}{self.key} = {{\n"
 
-        for child in self.children:
+        for child in self.nodes:
             output += child._to_string_literal(indent + 1)
 
         output += f"{tabs}}}\n"
