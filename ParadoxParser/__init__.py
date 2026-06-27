@@ -152,10 +152,10 @@ class ParadoxScriptParser:
             return GenericComment(token)
         return GenericToken(token)
 
-    def _backup_file(self):
+    def backup_file(self):
         shutil.copyfile(self.filepath, self.filepath.with_suffix(self.filepath.suffix + ".bak"))
 
-    def _to_pdx_file(self):
+    def to_pdx_file(self):
         output = ""
         for node in self.nodes:
             output += node._to_string_literal(indent=0)
