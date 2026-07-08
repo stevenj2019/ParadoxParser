@@ -197,20 +197,10 @@ class ParadoxLocParser:
                 match = re.compile(r'^\s*([A-Za-z0-9_.-]+):(?:(\d+))?\s*(?:"([^"]*)")?').match(stripped)
                 if match:
                     key, num, value = match.groups()
-                    # num = int(num) if num is not None else 0
-
                     if num is not None:
                         self.nodes.append(GenericLegacyLocKey(key, num, value))
                     else:
                         self.nodes.append(GenericLocKey(key, value))
-                    # preserve quotes if present
-                    # quote_match = re.search(r'"(.*)"', line)
-                    # if quote_match:
-                    #     value = quote_match.group(1)
-                    # else:
-                    #     value = value or ""
-
-                    # self.nodes.append(GenericLegacyLocKey(key, num, value))
 
     def _to_pdx_file(self):
         output = f"{self.language_key}:\n"
