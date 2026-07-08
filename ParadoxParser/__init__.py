@@ -6,7 +6,7 @@ from .ParadoxNodes import ( GenericNode, GenericKeyValue,
                             GenericTrigger, GenericList,
                             GenericFloat, GenericInt, GenericString,
                             GenericBool, GenericToken, GenericComment,
-                            GenericComparator, GenericLocKey)
+                            GenericComparator, GenericLegacyLocKey, GenericLocKey)
 from .constants import (LOGIC_FLOW_KEYS, LOGIC_KEYS, TRIGGER_KEYS)
 
 class ParadoxScriptParser:
@@ -197,22 +197,29 @@ class ParadoxLocParser:
                 match = re.compile(r'^\s*([A-Za-z0-9_.-]+):(?:(\d+))?\s*(?:"([^"]*)")?').match(stripped)
                 if match:
                     key, num, value = match.groups()
-                    num = int(num) if num is not None else 0
+                    # num = int(num) if num is not None else 0
 
-                    # preserve quotes if present
-                    quote_match = re.search(r'"(.*)"', line)
-                    if quote_match:
-                        value = quote_match.group(1)
+                    if num is not None:
+                        self.nodes.append(GenericLegacyLocKey(key, num, value))
                     else:
-                        value = value or ""
+                        self.nodes.append(GenericLocKey(key, value))
+                    # preserve quotes if present
+                    # quote_match = re.search(r'"(.*)"', line)
+                    # if quote_match:
+                    #     value = quote_match.group(1)
+                    # else:
+                    #     value = value or ""
 
-                    self.nodes.append(GenericLocKey(key, num, value))
+                    # self.nodes.append(GenericLegacyLocKey(key, num, value))
 
     def _to_pdx_file(self):
-        output = f"l_{self.language_key}:"
+        output = f"{self.language_key}:\n"
 
         for node in self.nodes:
             output += node._to_string_literal(indent=0)
 
         with open(self.filepath, "w", encoding=self.encoding) as f:
             f.write(output)
+
+    def _backup_file(self):
+        shutil.copyfile(self.filepath, self.filepath.with_suffix(self.filepath.suffix + ".bak"))

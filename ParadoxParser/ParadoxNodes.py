@@ -2,13 +2,21 @@
 # BASE CLASSES #
 ###          ###
 class GenericLocKey:
+    def __init__(self, key:str, value:str):
+        self.key = key
+        self.value = str(value)
+
+    def _to_string_literal(self, indent: int = 0):
+        return f"  {self.key}: \"{self.value}\"\n"
+    
+class GenericLegacyLocKey:
     def __init__(self, key:str, num:str, value:str):
         self.key = key
         self.num = int(num)
         self.value = str(value)
 
-    def _to_string_litteral(self):
-        return f"\n\t{self.key}:{self.num} \"{self.value}\""
+    def _to_string_literal(self, indent: int = 0):
+        return f"  {self.key}:{self.num} \"{self.value}\"\n"
     
 class GenericNode:
     def __init__(self, value:str|int|float|bool):

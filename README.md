@@ -61,5 +61,10 @@ No human should claim ownership of AI works. This tool is designed to be freely 
 - fixes string support when operator or punctuation in string ":, =, <, >, ."
 
 This is mainly being modified as i find issues in ParadoxEdit (a currently hidden github project, if you notice a bug i have not yet, feel free to raise it)
+### 1.4 method/API renames
+- fixes .children to be .nodes
+- fixes .to_pdx_script_file to be .to_pdx_file()
+### 1.5 Localisation handling
+- ParadoxLocParser now parses Legacy and New Syntax, 
 
 ## by 2.0 i intent to have a bugfree parser toolset
