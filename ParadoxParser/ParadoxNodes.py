@@ -6,6 +6,9 @@ class GenericLocKey:
         self.key = key
         self.value = str(value)
 
+    def _get_value(self)->str|int|float|bool:
+        return self.value
+
     def _to_string_literal(self, indent: int = 0):
         return f"  {self.key}: \"{self.value}\"\n"
     
@@ -14,6 +17,9 @@ class GenericLegacyLocKey:
         self.key = key
         self.num = int(num)
         self.value = str(value)
+
+    def _get_value(self)->str|int|float|bool:
+        return self.value
 
     def _to_string_literal(self, indent: int = 0):
         return f"  {self.key}:{self.num} \"{self.value}\"\n"
