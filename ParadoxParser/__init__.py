@@ -194,7 +194,9 @@ class ParadoxLocParser:
                     continue
 
                 # Try to parse loc key
-                match = re.compile(r'^\s*([A-Za-z0-9_.-]+):(?:(\d+))?\s*(?:"([^"]*)")?').match(stripped)
+                match = re.compile(
+                    r'^\s*([A-Za-z0-9_.-]+):(?:(\d+))?\s*(?:"((?:\\.|[^"])*)")?'
+                ).match(stripped)
                 if match:
                     key, num, value = match.groups()
                     if num is not None:
