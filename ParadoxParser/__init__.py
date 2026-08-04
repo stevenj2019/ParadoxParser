@@ -1,13 +1,28 @@
-import os, re
-from pathlib import Path
+import os
+import re
 import shutil
-from .ParadoxNodes import ( GenericNode, GenericKeyValue, 
-                            GenericBlock, GenericLogic, GenericFlow, 
-                            GenericTrigger, GenericList,
-                            GenericFloat, GenericInt, GenericString,
-                            GenericBool, GenericToken, GenericComment,
-                            GenericComparator, GenericLegacyLocKey, GenericLocKey)
-from .constants import (LOGIC_FLOW_KEYS, LOGIC_KEYS, TRIGGER_KEYS)
+from pathlib import Path
+
+from .constants import LOGIC_FLOW_KEYS, LOGIC_KEYS, TRIGGER_KEYS
+from .ParadoxNodes import (
+    GenericBlock,
+    GenericBool,
+    GenericComment,
+    GenericComparator,
+    GenericFloat,
+    GenericFlow,
+    GenericInt,
+    GenericKeyValue,
+    GenericLegacyLocKey,
+    GenericList,
+    GenericLocKey,
+    GenericLogic,
+    GenericNode,
+    GenericString,
+    GenericToken,
+    GenericTrigger,
+)
+
 
 class ParadoxScriptParser:
     def __init__(self, path: os.PathLike|str, encoding: str = "UTF-8"):
@@ -48,7 +63,7 @@ class ParadoxScriptParser:
         final_tokens = []
         for token in basic_tokens:
             # Skip comments and quoted strings
-            if token.startswith('"') or token.startswith('#'):
+            if token.startswith(('"', '#')):
                 final_tokens.append(token)
                 continue
 
