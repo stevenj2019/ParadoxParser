@@ -12,7 +12,7 @@ class GenericNode:
         tabs = "\t" * indent
         return f"{tabs}{self.get_value()}\n"
     
-class GenericLocKey:
+class GenericLocKey(GenericNode):
     def __init__(self, key:str, value:str) -> None:
         self.key = key
         self.value = str(value)
@@ -20,7 +20,7 @@ class GenericLocKey:
     def _to_string_literal(self, indent: int = 0) -> str:
         return f"  {self.key}: \"{self.value}\"\n"
     
-class GenericLegacyLocKey:
+class GenericLegacyLocKey(GenericNode):
     def __init__(self, key:str, num:str, value:str) -> None:
         self.key = key
         self.num = int(num)
