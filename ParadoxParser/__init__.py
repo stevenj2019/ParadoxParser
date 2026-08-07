@@ -219,7 +219,7 @@ class ParadoxLocParser:
                     else:
                         self.nodes.append(GenericLocKey(key, value))
 
-    def _to_pdx_file(self):
+    def to_pdx_file(self):
         output = f"{self.language_key}:\n"
 
         for node in self.nodes:
@@ -228,5 +228,5 @@ class ParadoxLocParser:
         with open(self.filepath, "w", encoding=self.encoding) as f:
             f.write(output)
 
-    def _backup_file(self):
+    def backup_file(self):
         shutil.copyfile(self.filepath, self.filepath.with_suffix(self.filepath.suffix + ".bak"))
