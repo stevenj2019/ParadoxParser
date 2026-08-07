@@ -1,13 +1,19 @@
-###          ###
-# BASE CLASSES #
-###          ###
+
+class GenericNode:
+    def __init__(self, value:str|float|bool) -> None:
+        self.value = value
+
+    def get_value(self)->str|int|float|bool:
+        return self.value
+    
+    def _to_string_literal(self, indent: int = 0) -> str:
+        tabs = "\t" * indent
+        return f"{tabs}{self.get_value()}\n"
+    
 class GenericLocKey:
     def __init__(self, key:str, value:str) -> None:
         self.key = key
         self.value = str(value)
-
-    def _get_value(self)->str|int|float|bool:
-        return self.value
 
     def _to_string_literal(self, indent: int = 0) -> str:
         return f"  {self.key}: \"{self.value}\"\n"
@@ -18,30 +24,16 @@ class GenericLegacyLocKey:
         self.num = int(num)
         self.value = str(value)
 
-    def _get_value(self)->str|int|float|bool:
-        return self.value
-
     def _to_string_literal(self, indent: int = 0) -> str:
         return f"  {self.key}:{self.num} \"{self.value}\"\n"
-    
-class GenericNode:
-    def __init__(self, value:str|float|bool) -> None:
-        self.value = value
-
-    def _get_value(self)->str|int|float|bool:
-        return self.value
-    
-    def _to_string_literal(self, indent: int = 0) -> str:
-        tabs = "\t" * indent
-        return f"{tabs}{self._get_value()}\n"
     
 class GenericKeyValue(GenericNode):
     def __init__(self, key: str, value:GenericNode) -> None:
         self.key = key
         self.value = value
     
-    def _get_value(self)->str:
-        return f"{self.key} = {self.value.get_value}"
+    def get_value(self)->str:
+        return self.value.get_value()
 
     def _to_string_literal(self, indent: int = 0) -> str:
         tabs = "\t" * indent
@@ -117,7 +109,7 @@ class GenericString(GenericNode):
 
     def _to_string_literal(self, indent = 0) -> str:
         tabs = "\t" * indent
-        return f"{tabs}\"{self._get_value()}\"\n"
+        return f"{tabs}\"{self.get_value()}\"\n"
     
 class GenericToken(GenericNode):
     def __init__(self, value: str) -> None:
@@ -132,18 +124,15 @@ class GenericComment(GenericNode):
     
     def _to_string_literal(self, indent:int = 0) -> str:
         tabs = "\t" * indent
-        return f"{tabs}{self._get_value()}\n"
+        return f"{tabs}{self.get_value()}\n"
     
 class GenericBool(GenericNode):
     def __init__(self, value: bool) -> None:
         self.value = value
-
-    def _get_value(self)->str:
-        return "yes" if self.value else "no"
     
     def _to_string_literal(self, indent: int = 0) -> str:
         tabs = "\t" * indent
-        return f"{tabs}{self._get_value()}\n"
+        return f"{tabs}{'yes' if self.value else 'no'}\n"
 
 class GenericComparator(GenericNode):
     def __init__(self, left:str, operator:str, right:str) -> None:
@@ -151,9 +140,13 @@ class GenericComparator(GenericNode):
         self.operator = operator
         self.right = right
 
-    def _get_value(self)->str:
-        return f"{self.left} {self.operator} {self.right}" 
+    def get_value(self)->str:
+        return f"{self.left} {self.operator} {self.right}"
 
+    def _to_string_litteral(self, indent: int = 0) -> str:
+        tabs = "\t" * indent
+        return f"{tabs}{self.get_value()}"
+    
 ###                       ###
 # SPCIALIST CLASSES - BLOCK #
 ###                       ###
