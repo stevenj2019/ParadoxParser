@@ -1,31 +1,33 @@
 from collections.abc import Iterator
 from typing import Protocol
 
-from ParadoxParser.ParadoxNodes import GenericBlock, GenericKeyValue
+from ParadoxParser.ParadoxNodes import (
+    GenericBlock,
+    GenericKeyValue,
+    GenericLegacyLocKey,
+    GenericLocKey,
+    GenericNode,
+)
 
 
 class NodeContainer(Protocol):
     nodes: list
 
-def find_block(block:NodeContainer, match_id:str) -> GenericBlock|None:
-    return next((node for node in block.nodes if isinstance(node, GenericBlock) and node.key == match_id), None)
+KEYED_NODE_TYPES = (GenericBlock, GenericKeyValue)
+LOCALISATION_NODE_TYPES = (GenericLegacyLocKey, GenericLocKey)
 
-def find_blocks(block:NodeContainer, match_id:str) -> list[GenericBlock]:
-    return [node for node in block.nodes if isinstance(node, GenericBlock) and node.key == match_id]
+def _matches_node(node: GenericNode, match_str:str) -> bool:
+    if isinstance(node, KEYED_NODE_TYPES):
+        return node.key == match_str
+    return node.value == match_str
 
-def find_keyvalue(block:NodeContainer, match_id:str) -> GenericBlock|None:
-    return next((node for node in block.nodes if isinstance(node, GenericKeyValue) and node.key == match_id), None)
+def find_node(block:NodeContainer, node_type:type[GenericNode], match_str:str) -> GenericNode | None:
+    return next((node for node in block.nodes if isinstance(node, node_type) and _matches_node(node_type, match_str)), None)
 
-def all_blocks(block:NodeContainer, match_id:str|None = None) -> Iterator[GenericBlock]:
+def find_nodes(block:NodeContainer, node_type:type[GenericNode], match_str:str) -> list[GenericNode]:
+    return [node for node in block.nodes if isinstance(node, node_type) and _matches_node(node_type, match_str)]
+
+def all_nodes(block:NodeContainer, node_type:type[GenericNode], match_str:str) -> Iterator[GenericNode]:
     for node in block.nodes:
-        if not isinstance(node, GenericBlock):
-            continue
-        if match_id is None or node.key == match_id:
-            yield node
-
-def all_keyvalues(block:NodeContainer, match_id:str|None = None) -> Iterator[GenericKeyValue]:
-    for node in block.nodes:
-        if not isinstance(node, GenericKeyValue):
-            continue
-        if match_id is None or node.key == match_id:
+        if isinstance(node, node_type) and _matches_node(node, match_str):
             yield node
