@@ -5,7 +5,9 @@ class GenericNode:
 
     def get_value(self)->str|int|float|bool:
         return self.value
-    
+
+    def get_display_value(self) -> str: return str(self.get_value())
+
     def _to_string_literal(self, indent: int = 0) -> str:
         tabs = "\t" * indent
         return f"{tabs}{self.get_value()}\n"
@@ -24,6 +26,8 @@ class GenericLegacyLocKey:
         self.num = int(num)
         self.value = str(value)
 
+    def get_display_value(self) -> str: return f"{self.key}:{self.num}"
+    
     def _to_string_literal(self, indent: int = 0) -> str:
         return f"  {self.key}:{self.num} \"{self.value}\"\n"
     
@@ -37,10 +41,7 @@ class GenericKeyValue(GenericNode):
 
     def _to_string_literal(self, indent: int = 0) -> str:
         tabs = "\t" * indent
-        return f"{tabs}{self.key} = {self.value._to_string_literal()}"
-    
-    def _get_key_val(self) -> tuple[str, str]:
-        return self.key, self.value
+        return f"{tabs}{self.key} = {self.value._to_string_literal()}\n"
     
 class GenericBlock(GenericNode):
     def __init__(self, key:str, nodes:list|None=None) -> None:
@@ -129,10 +130,12 @@ class GenericComment(GenericNode):
 class GenericBool(GenericNode):
     def __init__(self, value: bool) -> None:
         self.value = value
+
+    def get_display_value(self) -> str: return "yes" if self.value else "no"
     
     def _to_string_literal(self, indent: int = 0) -> str:
         tabs = "\t" * indent
-        return f"{tabs}{'yes' if self.value else 'no'}\n"
+        return f"{tabs}{self.get_display_value()}\n"
 
 class GenericComparator(GenericNode):
     def __init__(self, left:str, operator:str, right:str) -> None:
@@ -143,9 +146,9 @@ class GenericComparator(GenericNode):
     def get_value(self)->str:
         return f"{self.left} {self.operator} {self.right}"
 
-    def _to_string_litteral(self, indent: int = 0) -> str:
+    def _to_string_literal(self, indent: int = 0) -> str:
         tabs = "\t" * indent
-        return f"{tabs}{self.get_value()}"
+        return f"{tabs}{self.get_value()}\n"
     
 ###                       ###
 # SPCIALIST CLASSES - BLOCK #
