@@ -41,7 +41,7 @@ class GenericKeyValue(GenericNode):
 
     def _to_string_literal(self, indent: int = 0) -> str:
         tabs = "\t" * indent
-        return f"{tabs}{self.key} = {self.value._to_string_literal()}\n"
+        return f"{tabs}{self.key} = {self.value._to_string_literal()}"
     
 class GenericBlock(GenericNode):
     def __init__(self, key:str, nodes:list|None=None) -> None:
