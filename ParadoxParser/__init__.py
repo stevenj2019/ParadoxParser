@@ -25,12 +25,31 @@ from .ParadoxNodes import (
 
 
 class ParadoxScriptParser:
-    def __init__(self, path: os.PathLike|str, encoding: str = "UTF-8"):
+    @classmethod
+    def load(cls, 
+             path: Path, 
+             encoding: str = "UTF-8"
+    ):
+        parser = cls(path, encoding)
+        parser._parse_file()
+        return parser
+
+    @classmethod
+    def create(cls, 
+               path: Path, 
+               encoding: str = "UTF-8", 
+               nodes:list[GenericNode]|GenericNode|None = None
+    ):
+        parser = cls(path, encoding)
+        if nodes is not None:
+            parser.nodes = nodes if isinstance(nodes, list) else [nodes]
+        return parser
+
+    def __init__(self, path: Path, encoding: str = "UTF-8"):
         self.filepath = Path(path)
         self.filename = self.filepath.name
         self.encoding = encoding
         self.nodes: list[GenericNode] = []
-        self._parse_file()
 
     # ==========================================================
     # FILE LOADING
@@ -144,7 +163,7 @@ class ParadoxScriptParser:
         if self._peek() in ["<", ">"]:
             operator = self._next()
             value = self._next()
-            return GenericComparator(key, operator, value)
+            return GenericComparator(self._parse_value(key), operator, self._parse_value(value))
 
         # BARE TOKEN FALLBACK
         return self._parse_value(key)
@@ -179,14 +198,33 @@ class ParadoxScriptParser:
             f.write(output)
 
 #Parse a single Paradox loc file (*.yml)
-class ParadoxLocParser:
-    def __init__(self, path:os.PathLike|str, encoding:str="utf-8-sig"):
+class ParadoxLocParser:    
+    @classmethod
+    def load(cls, 
+             path: Path, 
+             encoding: str = "UTF-8"
+    ):
+        parser = cls(path, encoding)
+        parser._parse_file()
+        return parser
+
+    @classmethod
+    def create(cls, 
+               path: Path, 
+               encoding: str = "UTF-8", 
+               nodes:list[GenericNode]|GenericNode|None = None
+    ):
+        parser = cls(path, encoding)
+        if nodes is not None:
+            parser.nodes = nodes if isinstance(nodes, list) else [nodes]
+        return parser
+    
+    def __init__(self, path:Path, encoding:str="utf-8-sig"):
         self.filepath = Path(path)
         self.filename = self.filepath.name
         self.encoding = encoding
-        self.language_key:str = ""
         self.nodes: list[GenericNode] = []
-        self._parse_file()
+        self.language_key:str = ""
 
     def _parse_file(self):
         """Parse Paradox localization file into nodes preserving comments."""

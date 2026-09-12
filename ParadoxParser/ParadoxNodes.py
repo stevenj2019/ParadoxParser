@@ -138,7 +138,7 @@ class GenericBool(GenericNode):
         return f"{tabs}{self.get_display_value()}\n"
 
 class GenericComparator(GenericNode):
-    def __init__(self, left:str, operator:str, right:str) -> None:
+    def __init__(self, left:GenericNode, operator:str, right:GenericNode) -> None:
         self.left = left
         self.operator = operator
         self.right = right
