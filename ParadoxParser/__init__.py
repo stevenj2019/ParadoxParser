@@ -263,6 +263,8 @@ class ParadoxLocParser:
         for node in self.nodes:
             output += node._to_string_literal(indent=0)
 
+        self.filepath.parent.mkdir(parents=True, exist_ok=True)
+
         with open(self.filepath, "w", encoding=self.encoding) as f:
             f.write(output)
 
