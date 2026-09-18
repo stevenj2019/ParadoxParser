@@ -144,7 +144,7 @@ class GenericComparator(GenericNode):
         self.right = right
 
     def get_value(self)->str:
-        return f"{self.left} {self.operator} {self.right}"
+        return f"{self.left.get_value()} {self.operator} {self.right.get_value()}"
 
     def _to_string_literal(self, indent: int = 0) -> str:
         tabs = "\t" * indent
